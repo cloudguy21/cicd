@@ -1,0 +1,19 @@
+name: cd.yml
+on:
+  workflow_run:
+    workflows: ["CI build"]
+    types:
+      - completed
+jobs:
+  build:
+  
+    runs-on: self-hosted
+    
+    steps:
+    -name: pull  Docker image
+    run: sudo docker pull thecloudguy21/cicd-pipeline:latest
+    -name: Delete old docker container
+    run: sudo docker rm -f cicd-pipeline || true
+    - name: run Docker container
+    run:sudo docker run -d --name cicd-pipeline -p8080:8080 cloudguy21/cicd-pipeline:latest
+      
